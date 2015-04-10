@@ -12,11 +12,13 @@
   - "{{ elrepo_repo_url }}"
   tags:
   - packages
+  - cc
 
 - name: Use Eucalyptus local repositories
   lineinfile: regexp=mirrorlist line="baseurl={{ euca_local_repo_url }}" dest="{{ euca_repo_file }}"
   tags:
   - packages
+  - cc
   when:
   - euca_use_local_repo
 
@@ -24,6 +26,7 @@
   lineinfile: regexp=mirrorlist line="baseurl={{ euca2ools_local_repo_url }}" dest="{{ euca2ools_repo_file }}"
   tags:
   - packages
+  - cc
   when:
   - euca_use_local_repo
 
@@ -31,6 +34,7 @@
   yum: name=ntp state=present
   tags:
   - packages
+  - cc
   notify:
   - ntpd start
 
@@ -45,5 +49,4 @@
 - name: Update host info
   setup:
   tags:
-    - cc
-
+  - cc
