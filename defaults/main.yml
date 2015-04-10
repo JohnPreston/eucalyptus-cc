@@ -9,6 +9,8 @@ edge_using_private: True
 managed_addrpernet: 32
 instance_dns_domain: eucalyptus.internal
 
+cc_public_key_path: /var/tmp/cc-pub-key
+ssh_key_bits: 4096
 
 # Eucalyptus Generic
 

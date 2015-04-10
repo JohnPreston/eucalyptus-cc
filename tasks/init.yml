@@ -8,3 +8,28 @@
   tags:
   - euca_config
   - cc
+
+- name: Generate ssh-key on CC
+  user: generate_ssh_key=yes ssh_key_bits="{{ ssh_key_bits }}" ssh_key_passphrase= name=root
+  register: cc_public_key
+  tags:
+  - cc
+  - config
+
+- name: Authorize CC public_key
+  authorized_key: user=root state=present key="{{ cc_public_key.ssh_public_key }}"
+  tags:
+  - cc
+  - config
+
+- name: Config CC ssh config
+  copy: src=ssh_config dest=/root/.ssh/config
+  tags:
+  - cc
+  - config
+
+- name: Getting CC public key
+  fetch: src=/root/.ssh/id_rsa.pub dest="{{ cc_public_key_path }}-{{ partition }}" flat=yes
+  tags:
+  - cc
+  - config
