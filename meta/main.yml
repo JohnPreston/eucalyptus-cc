@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: John Mille
+  description: Role to install Eucalyptus CC
+  license: GPLv3
+  min_ansible_version: 1.6
+  platforms:
+  - name: EL
+    versions:
+    - 6
+  categories:
+  - cloud
+  - cloud:ec2
+dependencies: []

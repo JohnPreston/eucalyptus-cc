@@ -1,0 +1,10 @@
+################################################################################
+#
+# Node Controller configuration
+#
+
+- name: Configure eucalyptus.conf
+  template: src=eucalyptus.conf.j2 dest={{ euca_conf_file_path }}
+  tags:
+  - euca_config
+  - cc

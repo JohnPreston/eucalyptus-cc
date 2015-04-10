@@ -1,0 +1,11 @@
+---
+# vars file for eucalyptus-cc
+
+#vnet_private:
+#vnet_public:
+#vnet_netmask:
+#vnet_subnet:
+#networking_mode:
+#edge_using_private:
+#partition:
+#instance_dns_server:
