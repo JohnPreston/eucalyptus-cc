@@ -8,6 +8,11 @@
   tags:
   - euca_config
   - cc
+  when:
+  - not networking_mode_check|failed
+  - not vnet_private_check|failed
+  - not vnet_public_check|failed
+  - not partition_check|failed
 
 - name: Generate ssh-key on CC
   user: generate_ssh_key=yes ssh_key_bits="{{ ssh_key_bits }}" ssh_key_passphrase= name=root
@@ -33,3 +38,5 @@
   tags:
   - cc
   - config
+  when:
+  - not partition_check|failed

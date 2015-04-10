@@ -1,0 +1,56 @@
+
+- name: Debug core variables
+  debug: msg={{ item }}
+  with_items:
+  - "{{ partition }}"
+  - "{{ vnet_public }}"
+  - "{{ vnet_private }}"
+  - "{{ networking_mode }}"
+  tags:
+  - cc
+
+- name: Fail if vnet_public is not defined
+  fail: msg="Networking variables missing"
+  when:
+  - vnet_public is not defined
+  tags:
+  - cc
+  register: vnet_public_check
+  ignore_errors: True
+
+- name: Fail if vnet_private is not defined
+  fail: msg="vnet_private undefined"
+  when:
+  - vnet_private is not  defined
+  tags:
+  - cc
+  register: vnet_private_check
+  ignore_errors: True
+
+- name: Fail if networking_mode is not defined
+  fail: msg="Networking variables missing"
+  when:
+  - networking_mode is not defined
+  tags:
+  - cc
+  register: networking_mode_check
+  ignore_errors: True
+
+- name: Fail if partition missing
+  fail: msg="Partition missing"
+  when: partition is not defined
+  register: partition_check
+  ignore_errors: True
+  tags:
+  - cc
+
+- name: Debug return values
+  debug: msg="{{ item }}"
+  with_items:
+  - "{{ networking_mode_check }}"
+  - "{{ vnet_public_check }}"
+  - "{{ vnet_private_check }}"
+  - "{{ partition_check }}"
+  tags:
+  - cc
+  - debug
