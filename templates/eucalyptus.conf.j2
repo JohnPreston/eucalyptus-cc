@@ -10,7 +10,19 @@ EUCA_USER="eucalyptus"
 
 # Extra options to pass to the eucalyptus-cloud process, such as log
 # levels, heap size, or other JVM flags.
-CLOUD_OPTS=""
+# levels, heap size, or other JVM flags.
+{% set max_mem = ansible_memtotal_mb %}
+{% set xmx = max_mem / 2048 %}
+{% set xms = max_mem / 3092 %}
+{% if xms|int < 1 %}
+{% set xms = xmx %}
+{% endif %}
+{% if java_iface is defined%}
+{% set vnet = 'ansible_' + java_iface %}
+CLOUD_OPTS="--bind-addr={{  hostvars[inventory_hostname][vnet]['ipv4']['address'] }} -Xms{{ xms|int }}G -Xmx{{ xmx|int }}G"
+{% else %}
+CLOUD_OPTS="-Xms{{ xms|int }}G -Xmx{{ xmx|int }}G"
+{% endif %}
 
 ###########################################################################
 # STORAGE CONTROLLER (SC) CONFIGURATION
@@ -105,7 +117,7 @@ MAX_CORES="{{ ansible_processor_vcpus * cpu_overcommit }}"
 # The amount of disk space, in megabytes, that the NC is allowed to use
 # in its work directory ($INSTANCE_PATH/eucalyptus/work).  By default
 # the NC chooses automatically.  Values below 10 are ignored.
-│{% if inventory_hostname in groups['nc'] %}
+{% if inventory_hostname in groups['nc'] %}
 {% set found = { 'found' : False } %}
 {% for drive in ansible_mounts %}
 {% if drive['mount'] == "/var/lib/eucalyptus/instances" %}
@@ -114,11 +126,11 @@ MAX_CORES="{{ ansible_processor_vcpus * cpu_overcommit }}"
 {% set max_drive_mem = good_drive['size_available'] %}
 {% set work_size = max_drive_mem * 0.7 / 1048576 %}
 {% set cache_size = max_drive_mem * 0.25 / 1048576 %}
-NC_WORK_SIZE={{ work_size|int }}
+NC_WORK_SIZE="{{ work_size|int }}"
 # The amount of disk space, in megabytes, that the NC is allowed to use
 # in its cache directory ($INSTANCE_PATH/eucalyptus/cache).  By default
 # the NC chooses automatically.  Values below 10 are ignored.
-NC_CACHE_SIZE={{ cache_size|int }}
+NC_CACHE_SIZE="{{ cache_size|int }}"
 {% endif %}
 {% endfor %}
 {% if not found.found %}
@@ -129,11 +141,11 @@ NC_CACHE_SIZE={{ cache_size|int }}
 {% set max_drive_mem = good_drive['size_available'] %}
 {% set work_size = max_drive_mem * 0.7 / 1048576 %}
 {% set cache_size = max_drive_mem * 0.25 / 1048576 %}
-NC_WORK_SIZE={{ work_size|int }}
+NC_WORK_SIZE="{{ work_size|int }}"
 # The amount of disk space, in megabytes, that the NC is allowed to use
 # in its cache directory ($INSTANCE_PATH/eucalyptus/cache).  By default
 # the NC chooses automatically.  Values below 10 are ignored.
-NC_CACHE_SIZE={{ cache_size|int }}
+NC_CACHE_SIZE="{{ cache_size|int }}"
 {% endif %}
 {% endfor %}
 {%endif%}
@@ -144,11 +156,11 @@ NC_CACHE_SIZE={{ cache_size|int }}
 {% set max_drive_mem = good_drive['size_available'] %}
 {% set work_size = max_drive_mem * 0.7 / 1048576 %}
 {% set cache_size = max_drive_mem * 0.25 / 1048576 %}
-NC_WORK_SIZE={{ work_size|int }}
+NC_WORK_SIZE="{{ work_size|int }}"
 # The amount of disk space, in megabytes, that the NC is allowed to use
 # in its cache directory ($INSTANCE_PATH/eucalyptus/cache).  By default
 # the NC chooses automatically.  Values below 10 are ignored.
-NC_CACHE_SIZE={{ cache_size|int }}
+NC_CACHE_SIZE="{{ cache_size|int }}"
 {% endif %}
 {% endfor %}
 {% endif %}
