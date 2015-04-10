@@ -1,13 +1,15 @@
 ---
 # vars file for eucalyptus-cc
 
-#partition:
+# Mandatory variables
 
+#partition:
 #vnet_private:
 #vnet_public:
+#networking_mode:
+
+# Optional - Depends on the networking mode
 #vnet_netmask:
 #vnet_subnet:
-#networking_mode:
 #edge_using_private:
-
 #instance_dns_server:

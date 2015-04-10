@@ -1,5 +1,22 @@
 ---
 # tasks file for eucalyptus-cc
 
+- name: Debug core variables
+  debug: msg={{ item }}
+  with_items:
+  - "{{ partition }}"
+  - "{{ vnet_public }}"
+  - "{{ vnet_private }}"
+  - "{{ networking_mode }}"
+  tags:
+  - cc
+
+- name: Fail if
+  fail: msg="Missing partition value"
+  when:
+  - not "{{ partition }}"
+  tags:
+  - cc
+
 - include: packages.yml
 - include: init.yml
